@@ -20,17 +20,13 @@ TCGA_2014 %>% remove_rownames() %>% column_to_rownames(var ="Name")
 # PCA Group Assigning
 ## Make sure that there are no blank recurrant columns of values
 ## Don't include the first column with samples names as character string
-TCGA_2014.pca <- prcomp(TCGA_2014, center = T, scale. = T)
+TCGA_2014.pca <- prcomp(TCGA_2014[,(-1:-2)], center = T, scale. = T)
 summary(TCGA_2014.pca)
 
-# Assigning Samples To MT Groups
-## The number after the group represents the number of rows with this MT
-mt_groups <- c(rep("WT", 6), rep("KRAS", 2), rep("STK11", 4), rep("KRAS/STK11", 4))
-
 # Make A Plot
-ggbiplot(luminextotal.pca, ellipse = F, obs.scale = 1, var.scale = 1, choices = c(1,2), 
-         var.axes = F, labels = rownames(luminextotal), groups = mt_groups, labels.size = 1.75) + ggtitle("Luminex TCM PCA")
+ggbiplot(TCGA_2014.pca, ellipse = F, obs.scale = 1, var.scale = 1, choices = c(1,2), 
+         var.axes = F, labels = rownames(TCGA_2014), labels.size = 1.75) + ggtitle("TCGA MTs PCA")
          
 # Export The Plot
-ggsave('Luminex TCM PCA.pdf', last_plot())
+ggsave('TCGA MTs PCA.pdf', last_plot())
 
